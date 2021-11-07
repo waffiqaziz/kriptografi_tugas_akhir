@@ -18,6 +18,12 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import user.User;
 import java.awt.Component;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -55,7 +61,7 @@ public class EmailIn {
     }
 }
   
-  public EmailIn(User n) {
+  public EmailIn(User n) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
     window.setLayout(null);
     window.setSize(720, 568);
     window.setVisible(true);
@@ -87,7 +93,6 @@ public class EmailIn {
     
     btnBack.setBounds(0, 230, 80, 30);
     tabel.getColumnModel().getColumn(0).setPreferredWidth(20);
-//    tabel.getColumnModel().getColumn(0).setPreferredWidth(1);
     tabel.getColumnModel().getColumn(1).setPreferredWidth(100);
     
 // action listener

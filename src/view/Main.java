@@ -8,6 +8,16 @@ package view;
 import model.MyConnection;
 import javax.swing.JOptionPane;
 import user.User;
+import control.ControlUser;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  *
@@ -23,11 +33,13 @@ public class Main {
           JOptionPane.showMessageDialog(null, "Tidak dapat terhubung ke database. Pastikan Xampp sudah aktif!", "Pemberitahuan", JOptionPane.INFORMATION_MESSAGE);
         } else {
           User n = new User();
+//          ControlUser cu = new ControlUser();
           new Login();
 //            new WriteMail(n);
 //           new AllEmail(n);
         }
       }
+
     });
   }
 }

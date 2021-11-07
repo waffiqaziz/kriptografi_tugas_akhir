@@ -6,6 +6,9 @@
 
 package control;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import model.MyConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,21 +41,17 @@ public class ControlUser {
     return false;
   }
 
-// METHOD TRANSFER
-
-  
-  public boolean writeEmail(User n, String emailPenerima, String message) {
+  public boolean writeEmail(User n, String emailPenerima, String cipherText) {
     PreparedStatement ps;
 
-    String query = "INSERT INTO `log`(`type`, `emailPenerima`, `emailPengirim`, `content`) VALUES (?,?,?,?)";
+    String query = "INSERT INTO `log`(`emailPenerima`, `emailPengirim`, `content`) VALUES (?,?,?)";
 
     try {
       MyConnection myConnection = new MyConnection();
       ps = myConnection.getCOnnection().prepareStatement(query);
-      ps.setString(1, "pesan");
-      ps.setString(2, emailPenerima);
-      ps.setString(3, n.getEmail());
-      ps.setString(4, message);
+      ps.setString(1, emailPenerima);
+      ps.setString(2, n.getEmail());
+      ps.setString(3, cipherText);
 
       // jika berhasil
       if (ps.executeUpdate() > 0) {
@@ -121,7 +120,7 @@ public class ControlUser {
         String dtDate = rs.getString(6);
         
         // simpan dalam atribut
-          n.setUser(dtEmail, pass, dtName, dtTelp);
+          n.setUser(dtEmail, dtPass, dtName, dtTelp);
           n.setUser_id(dtUserId);
           n.setDate(dtDate);
         
@@ -153,4 +152,58 @@ public class ControlUser {
       return false;
     }
   }
+
+  public void setKey(User n,String publicKey){         
+    //Public key
+    System.out.println("insert publickey " + n.getEmail() + "\n" + publicKey +"\n");
+      PreparedStatement ps;
+      String query = "UPDATE `user` SET `publicKey`=? WHERE `email`=?";
+      
+      try {
+        MyConnection myConnection = new MyConnection();
+        ps = myConnection.getCOnnection().prepareStatement(query);
+        ps.setString(1, publicKey);
+        ps.setString(2, n.getEmail());
+        int i = ps.executeUpdate();
+
+      } catch (SQLException ex) {
+        Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+      }
+  }
+  
+  public String getPublicKey(String email) throws IOException{
+    PreparedStatement ps;
+    ResultSet rs;
+    String query = "SELECT * FROM `user` WHERE `email` =?";
+
+    try {
+      MyConnection myConnection = new MyConnection();
+      ps = myConnection.getCOnnection().prepareStatement(query);
+      ps.setString(1, email);
+ 
+      rs = ps.executeQuery();
+      
+      if (rs.next()) {
+        String publicKeyRecipient = rs.getString(7);
+        System.out.println(publicKeyRecipient);
+        System.out.println("PublicKey berhasil");
+        return publicKeyRecipient;
+      } else {
+        System.out.println("PublicKey penerima gagal");
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+    } 
+    System.out.println("PublicKey penerima gagal");
+    return null;
+  }
+  
+  public String getPrivateKey(String email) throws IOException {
+    Path fileName = Path.of("RSA//"+email+"//privateKey");
+
+    String privateKey = Files.readString(fileName);
+    
+    return privateKey;
+  }
+
 }

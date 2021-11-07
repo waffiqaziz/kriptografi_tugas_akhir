@@ -16,7 +16,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import control.ControlUser;
+import control.RSAUtil;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.JTextArea;
@@ -82,23 +92,40 @@ public class WriteMail {
     lContent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 // ACTION LISTENER
-    btnSend.addActionListener((ActionEvent arg0) -> {
-      String emailPenerima;
-      String pesan;
-      
-      emailPenerima = tfEmailPenerima.getText();
-      pesan = taContent.getText();
-
-      if (control.writeEmail(n, emailPenerima, pesan)) { // transfer
-        window.dispose();
-        new MainMenu(n);
-        JOptionPane.showMessageDialog(null, "Send Email Success");
-      } else {
-        JOptionPane.showMessageDialog(null, "Send Email Failed");
+    btnSend.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+        RSAUtil rsa = new RSAUtil();
+        ControlUser cu = new ControlUser();
+        
+        String emailPenerima;
+        String plainText;
+        
+        emailPenerima = tfEmailPenerima.getText();
+        plainText = taContent.getText();
+        
+        String publicKey = null;
+        String cipherText = null;
+        try {
+          publicKey = cu.getPublicKey(emailPenerima);
+        } catch (IOException ex) {
+          Logger.getLogger(WriteMail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+          cipherText = rsa.rsaEncryption(plainText, publicKey);
+        } catch (BadPaddingException | IllegalBlockSizeException | InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException ex) {
+          Logger.getLogger(WriteMail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (control.writeEmail(n, emailPenerima, cipherText)) { // transfer
+          window.dispose();
+          new MainMenu(n);
+          JOptionPane.showMessageDialog(null, "Send Email Success");
+        } else {
+          JOptionPane.showMessageDialog(null, "Send Email Failed");
+        }
       }
-    }
-
-  );
+    });
 
   btnReset.addActionListener ( 
     (ActionEvent arg0) -> {
