@@ -17,6 +17,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import user.User;
 
 /**
@@ -45,6 +47,7 @@ public class RSAUtil {
 
   //PENGECEKAN RSA WORK/NO
     //plaintext
+      System.out.println("CHECKING RSA WORK");
       String secretMessage = "Baeldung secret message";
       System.out.println("Plainttext : " + secretMessage);
     
@@ -76,8 +79,8 @@ public class RSAUtil {
         String decryptedMessage = new String(decryptedMessageBytes, StandardCharsets.UTF_8);
         System.out.println(decryptedMessage);
               
-    } catch (NoSuchAlgorithmException e) {
-      System.err.println(e.getMessage());
+    } catch (NoSuchAlgorithmException ex) {
+      Logger.getLogger(RSAUtil.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
   
@@ -89,10 +92,8 @@ public class RSAUtil {
       KeyFactory keyFactory = KeyFactory.getInstance("RSA");
       publicKey = keyFactory.generatePublic(keySpec);
 
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    } catch (InvalidKeySpecException e) {
-      e.printStackTrace();
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+      Logger.getLogger(RSAUtil.class.getName()).log(Level.SEVERE, null, ex);
     }
     
     Cipher encryptCipher = Cipher.getInstance("RSA");
@@ -114,10 +115,8 @@ public class RSAUtil {
       KeyFactory keyFactory = KeyFactory.getInstance("RSA");
       privateKey = keyFactory.generatePrivate(keySpec);
 
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    } catch (InvalidKeySpecException e) {
-      e.printStackTrace();
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+      Logger.getLogger(RSAUtil.class.getName()).log(Level.SEVERE, null, ex);
     }
 
     Cipher decryptCipher = Cipher.getInstance("RSA");

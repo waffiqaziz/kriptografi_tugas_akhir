@@ -18,24 +18,48 @@ import user.User;
  */
 public class CountRow {
 
-  public int countRow(User n) {
-    PreparedStatement ps;
-    ResultSet rs;
-    int  row = 0;
-    
-    String query = "Select * from `log` WHERE `emailPenerima`=? OR `emailPengirim`=?";
-    
+  public int countRow(User n, int tampilkan) {
+    int row = 0;
     try {
       MyConnection myConnection = new MyConnection();
+      PreparedStatement ps;
+      ResultSet rs;
+
+      //query tergantung yang akan ditampilkan
+      String query = null;
+      // 1 = tampilkan semua, 2 = tampilkan email masuk, 3 = tampilkan email keluar
+      switch (tampilkan) {
+        case 1 ->
+          query = "Select * from `log` WHERE `emailPenerima`=? OR `emailPengirim`=?";
+        case 2 ->
+          query = "Select * from `log` WHERE `emailPenerima`=?";
+        case 3 ->
+          query = "Select * from `log` WHERE `emailPengirim`=?";
+        default -> {
+          System.out.println("query read table salah");
+        }
+      }
+
       ps = myConnection.getCOnnection().prepareStatement(query);
-      ps.setString(1, n.getEmail());
-      ps.setString(2, n.getEmail());
+      switch (tampilkan) {
+        case 1:
+          ps.setString(1, n.getEmail());
+          ps.setString(2, n.getEmail());
+          break;
+        case 2:
+          ps.setString(1, n.getEmail());
+          break;
+        case 3:
+          ps.setString(1, n.getEmail());
+          break;
+        default:
+      }
       rs = ps.executeQuery();
 
       while (rs.next()) {
         row++;
       }
-      return row ;
+      return row;
     } catch (SQLException ex) {
       Logger.getLogger(CountRow.class.getName()).log(Level.SEVERE, null, ex);
     }

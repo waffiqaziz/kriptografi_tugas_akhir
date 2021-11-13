@@ -8,6 +8,14 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import model.MyConnection;
 import user.User;
@@ -31,6 +39,7 @@ public class MainMenu extends JFrame {
   JButton btnChangePass = new JButton("Change Password");
   JButton btnTranfer = new JButton("Write Email");
   JButton btnEmailIn = new JButton("Email In");
+  JButton btnEmailAll = new JButton("All Email");
   JButton btnEmailOut = new JButton("Email Out");
   JButton btnLogout = new JButton("Logout");
   
@@ -38,7 +47,7 @@ public class MainMenu extends JFrame {
     lGuide.setText("Welcome " + n.getNama());
     lGuide.setVerticalTextPosition(0);
     window.setLayout(null);
-    window.setSize(380, 350);
+    window.setSize(380, 390);
     window.setVisible(true);
     window.setLocationRelativeTo(null); // center
     window.setResizable(false);
@@ -48,6 +57,7 @@ public class MainMenu extends JFrame {
     window.add(lGuide);
     window.add(btnChangePass);
     window.add(btnEmailIn);
+    window.add(btnEmailAll);
     window.add(btnEmailOut);
     window.add(btnTranfer);
     window.add(btnLogout);
@@ -56,10 +66,11 @@ public class MainMenu extends JFrame {
 // sett bounds(m,n,o,p) >>> (sumbu-x,sumbu-y,panjang komponen, tinggi komponen)
     lGuide.setBounds(0, 25, 370, 30);
     btnTranfer.setBounds(120, 75, 130, 30);
-    btnEmailIn.setBounds(95, 115, 180, 30);
-    btnEmailOut.setBounds(95, 155, 180, 30);
-    btnChangePass.setBounds(110, 195, 155, 30);
-    btnLogout.setBounds(120, 235, 130, 30);
+    btnEmailAll.setBounds(95, 115, 180, 30);
+    btnEmailIn.setBounds(95, 155, 180, 30);
+    btnEmailOut.setBounds(95, 195, 180, 30);
+    btnChangePass.setBounds(110, 235, 155, 30);
+    btnLogout.setBounds(120, 275, 130, 30);
 
     lGuide.setHorizontalAlignment(0);
 // ACTION LISTENER
@@ -73,11 +84,27 @@ public class MainMenu extends JFrame {
     });
     btnEmailIn.addActionListener((ActionEvent arg0) -> {
       window.dispose();
-      new EmailIn(n);
+      try {
+        new ShowEmailIn(n,2);
+      } catch (IOException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+      }
     });
     btnEmailOut.addActionListener((ActionEvent arg0) -> {
       window.dispose();
-      new EmailOut(n);
+      try {
+        new ShowEmailOut(n,3);
+      } catch (IOException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    });
+    btnEmailAll.addActionListener((ActionEvent arg0) -> {
+      window.dispose();
+      try {
+        new ShowEmail(n,1);
+      } catch (IOException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+      }
     });
     btnLogout.addActionListener((ActionEvent arg0) -> {
       int yes = JOptionPane.showConfirmDialog(
@@ -85,16 +112,16 @@ public class MainMenu extends JFrame {
               "Are you sure want to Logout",
               "Confirm Logout",
               JOptionPane.YES_NO_OPTION);
-      if (yes == JOptionPane.YES_OPTION){
+      if (yes == JOptionPane.YES_OPTION) {
         window.dispose();
         new Login();
-      } else;
+      }
     });
 
     window.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
-        System.out.println("Closed");
+        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, e);
       }
     });
   }
