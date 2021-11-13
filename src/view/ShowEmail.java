@@ -7,6 +7,7 @@ package view;
 
 import control.ControlUser;
 import control.RSAUtil;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -96,9 +97,11 @@ public class ShowEmail {
         //get private key
         String plainText = null;
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("/home/me/Documents"));
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         int option = fileChooser.showOpenDialog(frame);
         String privateKey = null;
+        
         if (option == JFileChooser.APPROVE_OPTION) {
           String pathFile = fileChooser.getSelectedFile().toString();
           Path fileName = Path.of(pathFile);

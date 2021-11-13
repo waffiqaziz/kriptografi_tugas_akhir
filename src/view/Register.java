@@ -15,6 +15,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -25,6 +27,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -57,7 +60,7 @@ public class Register {
   JTextField tfName = new JTextField(20);
   JTextField tfTelp = new JTextField(15);
   JDateChooser dcDate = new JDateChooser();
-  
+
   JButton btnRegis = new JButton("Regis");
   JButton btnReset = new JButton("Reset");
 
@@ -86,12 +89,12 @@ public class Register {
 
 // SETT BOUNDS
 // sett bounds(m,n,o,p) >>> (sumbu-x,sumbu-y,panjang komponen, tinggi komponen)
-    lName .setBounds (90, 35, 70, 30);
-    lEmail.setBounds (90, 75, 35, 30);
-    lPass .setBounds (90, 115, 70, 30);
-    lTelp .setBounds (90, 155, 90, 30);
-    lDate .setBounds (90, 195, 80, 30);
-    
+    lName.setBounds(90, 35, 70, 30);
+    lEmail.setBounds(90, 75, 35, 30);
+    lPass.setBounds(90, 115, 70, 30);
+    lTelp.setBounds(90, 155, 90, 30);
+    lDate.setBounds(90, 195, 80, 30);
+
     tfName.setBounds(200, 35, 150, 30);
     tfEmail.setBounds(200, 75, 150, 30);
     pfPass.setBounds(200, 115, 150, 30);
@@ -119,37 +122,38 @@ public class Register {
         ControlUser cu = new ControlUser();
         RSAUtil rsa = new RSAUtil();
         String date = null;
-        
+
         String name = tfName.getText();
         String pass = String.valueOf(pfPass.getPassword());
         String email = tfEmail.getText();
         String telp = tfTelp.getText();
-        
+
         // cek jika kolom ada yang kosong
         if (name.equals("") || email.equals("") || telp.equals("") || dcDate.getDate() == null) {
           JOptionPane.showMessageDialog(null, "All Form Must Filled");
         } else {
-          
+
           // cek jika ada kolom yang belum di isi
           SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd"); // format tahun-bulan-hari
           date = dateformat.format(dcDate.getDate());
           System.out.println("Cek Date " + date);
-          
+
           if (!cu.checkEmail(email)) { // jika tidak ada email yang sama, maka akan di masukkan kedalam database
             n.setUser(email, pass, name, telp);
             n.setDate(date);
-            
-            if (cu.register(n)) {  try {
-              // register berhasil maka buat key-nya
-              rsa.keyUtilGenerator(n, n.getEmail());
-            } catch (IllegalBlockSizeException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IOException | NoSuchAlgorithmException ex) {
-              Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+
+            if (cu.register(n)) {
+              try {
+                // register berhasil maka buat key-nya
+                rsa.keyUtilGenerator(n, n.getEmail());
+              } catch (IllegalBlockSizeException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IOException | NoSuchAlgorithmException ex) {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              window.dispose();
+              new Login();
+              JOptionPane.showMessageDialog(null, "New User Add");
             }
-            window.dispose();
-            new Login();
-            JOptionPane.showMessageDialog(null, "New User Add");
-            }
-            
+
           } else {
             JOptionPane.showMessageDialog(null, "Email has been Registered as Account");
           }
@@ -212,6 +216,4 @@ public class Register {
       }
     });
   }
-  
-
 }

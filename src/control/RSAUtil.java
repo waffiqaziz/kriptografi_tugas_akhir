@@ -40,8 +40,7 @@ public class RSAUtil {
     
     //generate privatekey
       String priv = Base64.getEncoder().encodeToString(keyPairGenerator.getPrivateKey().getEncoded());
-//      keyPairGenerator.writeToFile("RSA//"+email+"//privateKey", keyPairGenerator.getPrivateKey().getEncoded());
-      keyPairGenerator.writeToFile("RSA//"+email+"//privateKey", priv);
+      keyPairGenerator.savePrivateKey(priv);
       System.out.println("Public : "+Base64.getEncoder().encodeToString(keyPairGenerator.getPublicKey().getEncoded()));
       System.out.println("Privat : "+Base64.getEncoder().encodeToString(keyPairGenerator.getPrivateKey().getEncoded()));
 

@@ -197,13 +197,4 @@ public class ControlUser {
     System.out.println("PublicKey penerima gagal");
     return null;
   }
-  
-  public String getPrivateKey(String email) throws IOException {
-    Path fileName = Path.of("RSA//"+email+"//privateKey");
-
-    String privateKey = Files.readString(fileName);
-    
-    return privateKey;
-  }
-
 }

@@ -71,13 +71,10 @@ public class ReadData {
         case 1 -> {
           // show all emai.l
           while (rs.next()) { //konversi tabel ke string
-//            data[row][0] = rs.getString(2);
             data[row][0] = rs.getString(3);
             data[row][1] = rs.getString(2);
             data[row][2] = rs.getString(4);
-//            if (rs.getString(2).equals(n.getEmail())) {
-//              data[row][2] = rsa.rsaDecryption(rs.getString(4), cu.getPrivateKey(n.getEmail()));
-//            }
+
             row++;
           }
         }
@@ -86,10 +83,6 @@ public class ReadData {
           while (rs.next()) { //konversi tabel ke string
             data[row][0] = rs.getString(3);
             data[row][1] = rs.getString(4);
-//            if (rs.getString(2).equals(n.getEmail())) {
-//              //rsa.rsaDecryption(ciphertext, privatekey utf-8)
-//              data[row][1] = rsa.rsaDecryption(rs.getString(4), cu.getPrivateKey(n.getEmail()));
-//            }
             row++;
           }
         }
@@ -98,10 +91,6 @@ public class ReadData {
           while (rs.next()) { //konversi tabel ke string
             data[row][0] = rs.getString(2);
             data[row][1] = rs.getString(4);
-//            if (rs.getString(2).equals(n.getEmail())) {
-//              //rsa.rsaDecryption(ciphertext, privatekey utf-8)
-//              data[row][1] = rsa.rsaDecryption(rs.getString(4), cu.getPrivateKey(n.getEmail()));
-//            }
             row++;
           }
         }
