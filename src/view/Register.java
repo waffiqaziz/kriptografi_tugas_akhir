@@ -10,13 +10,10 @@ import control.ControlUser;
 import control.RSAUtil;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -27,7 +24,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -115,48 +111,44 @@ public class Register {
     lguide.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 // ACTION LISTENER
-    btnRegis.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        User n = new User();
-        ControlUser cu = new ControlUser();
-        RSAUtil rsa = new RSAUtil();
-        String date = null;
+    btnRegis.addActionListener((var arg0) -> {
+      User n = new User();
+      ControlUser cu = new ControlUser();
+      RSAUtil rsa = new RSAUtil();
+      String date = null;
 
-        String name = tfName.getText();
-        String pass = String.valueOf(pfPass.getPassword());
-        String email = tfEmail.getText();
-        String telp = tfTelp.getText();
+      String name = tfName.getText();
+      String pass = String.valueOf(pfPass.getPassword());
+      String email = tfEmail.getText();
+      String telp = tfTelp.getText();
 
-        // cek jika kolom ada yang kosong
-        if (name.equals("") || email.equals("") || telp.equals("") || dcDate.getDate() == null) {
-          JOptionPane.showMessageDialog(null, "All Form Must Filled");
-        } else {
+      // cek jika kolom ada yang kosong
+      if (name.equals("") || email.equals("") || telp.equals("") || dcDate.getDate() == null) {
+        JOptionPane.showMessageDialog(null, "All Form Must Filled");
+      } else {
 
-          // cek jika ada kolom yang belum di isi
-          SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd"); // format tahun-bulan-hari
-          date = dateformat.format(dcDate.getDate());
-          System.out.println("Cek Date " + date);
+        // cek jika ada kolom yang belum di isi
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd"); // format tahun-bulan-hari
+        date = dateformat.format(dcDate.getDate());
+        System.out.println("Cek Date " + date);
 
-          if (!cu.checkEmail(email)) { // jika tidak ada email yang sama, maka akan di masukkan kedalam database
-            n.setUser(email, pass, name, telp);
-            n.setDate(date);
-
-            if (cu.register(n)) {
-              try {
-                // register berhasil maka buat key-nya
-                rsa.keyUtilGenerator(n, n.getEmail());
-              } catch (IllegalBlockSizeException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IOException | NoSuchAlgorithmException ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-              }
+        if (!cu.checkEmail(email)) { // jika tidak ada email yang sama, maka akan di masukkan kedalam database
+          n.setUser(email, pass, name, telp);
+          n.setDate(date);
+          try {
+            if (n.setPublicKey(rsa.keyUtilGenerator()) && cu.register(n)) {
               window.dispose();
-              new Login();
+              Login login = new Login();
+              login.pack();
               JOptionPane.showMessageDialog(null, "New User Add");
             }
-
-          } else {
-            JOptionPane.showMessageDialog(null, "Email has been Registered as Account");
+          } catch (IllegalBlockSizeException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IOException | NoSuchAlgorithmException ex) {
+            JOptionPane.showMessageDialog(null, "Register Failed", "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
           }
+
+        } else {
+          JOptionPane.showMessageDialog(null, "Email has been Registered as Account");
         }
       }
     });
@@ -175,7 +167,8 @@ public class Register {
       public void mouseClicked(MouseEvent e) {
         System.out.println("Login Form Clicked");
         window.dispose();
-        new Login();
+        Login login = new Login();
+        login.pack();
       }
     });
     lEmail.addMouseListener(new MouseAdapter() {

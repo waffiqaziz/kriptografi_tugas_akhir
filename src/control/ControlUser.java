@@ -7,8 +7,6 @@
 package control;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import model.MyConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,7 +67,7 @@ public class ControlUser {
   public boolean register(User n){
       PreparedStatement ps;    
 
-      String query = "INSERT INTO user (`email`, `pass`, `full_name`, `telp`, `dateOfBirth`) VALUES (?,?,?,?,?)";
+      String query = "INSERT INTO user (`email`, `pass`, `full_name`, `telp`, `dateOfBirth`, `publicKey`) VALUES (?,?,?,?,?,?)";
 
       try {
         MyConnection myConnection = new MyConnection();
@@ -78,6 +76,7 @@ public class ControlUser {
         ps.setString(2, n.getPass());
         ps.setString(3, n.getNama());
         ps.setString(4, n.getTelp());
+        ps.setString(6, n.getPublicKey());
 
         if (n.getDateOfBirth() != null) { // jika date kosong maka set null
           ps.setString(5, n.getDateOfBirth());

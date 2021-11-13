@@ -60,7 +60,6 @@ public class ShowEmailIn {
     mainPanel.add(panel2);
     
     JButton btnBack = new JButton("Back");
-    final JLabel label = new JLabel();
 
     Object namaKolom[] = {"From", "Content"};
     JTable table;
@@ -76,7 +75,6 @@ public class ShowEmailIn {
     panel.add(new JScrollPane(table));
     frame.add(mainPanel);
     
-    panel2.add(label);
     panel2.add(btnBack);
     
   //ACTION LISTENER
@@ -110,7 +108,7 @@ public class ShowEmailIn {
           System.out.println(privateKey);
 
         } else {
-          label.setText("Decryption Failed!!!");
+          JOptionPane.showMessageDialog(null, "Decryption Failed!!!", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         try {
@@ -119,6 +117,8 @@ public class ShowEmailIn {
           Logger.getLogger(ShowEmailIn.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        System.out.println(plainText);
+        
         JOptionPane.showMessageDialog(null, plainText, "Content", JOptionPane.PLAIN_MESSAGE);
       }
     });
@@ -126,7 +126,8 @@ public class ShowEmailIn {
     btnBack.addActionListener((var arg0) -> {
       frame.dispose();
       System.out.println("Yes");
-      new MainMenu(n);
+      MainMenu mainMenu = new MainMenu(n);
+      mainMenu.pack();
     });
 
   }

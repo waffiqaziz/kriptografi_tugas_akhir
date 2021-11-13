@@ -52,12 +52,10 @@ public class ShowEmailOut {
     JPanel panel2 = new JPanel();
     mainPanel.setBorder(new EmptyBorder(20, 0, 20, 0)); // set border
 
-    
     mainPanel.add(panel);
     mainPanel.add(panel2);
     
     JButton btnBack = new JButton("Back");
-    final JLabel label = new JLabel();
 
     Object namaKolom[] = {"To", "Content"};
     JTable table;
@@ -73,7 +71,6 @@ public class ShowEmailOut {
     panel.add(new JScrollPane(table));
     frame.add(mainPanel);
     
-    panel2.add(label);
     panel2.add(btnBack);
     
   //ACTION LISTENER
@@ -107,7 +104,7 @@ public class ShowEmailOut {
           System.out.println(privateKey);
 
         } else {
-          label.setText("Decryption Failed!!!");
+          JOptionPane.showMessageDialog(null, "Decryption Failed!!!", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         try {

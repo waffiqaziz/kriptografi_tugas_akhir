@@ -9,19 +9,16 @@ package control;
  *
  * @author Waffiq Aziz / 123190070
  */
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.*;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class RSAKeyPairGenerator {
 
-  private PrivateKey privateKey;
-  private PublicKey publicKey;
+  private final PrivateKey privateKey;
+  private final PublicKey publicKey;
 
   public RSAKeyPairGenerator() throws NoSuchAlgorithmException {
     KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");

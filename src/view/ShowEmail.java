@@ -48,8 +48,6 @@ public class ShowEmail {
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
   }
-  
-  
 
   private void createUI(final JFrame frame, User n, int tampilkan) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
     ReadData rd = new ReadData();
@@ -60,12 +58,10 @@ public class ShowEmail {
     JPanel panel2 = new JPanel();
     mainPanel.setBorder(new EmptyBorder(20, 0, 20, 0)); // set border
 
-    
     mainPanel.add(panel);
     mainPanel.add(panel2);
     
     JButton btnBack = new JButton("Back");
-    final JLabel label = new JLabel();
 
     Object namaKolom[] = {"From","To", "Content"};
     JTable table;
@@ -81,7 +77,6 @@ public class ShowEmail {
     panel.add(new JScrollPane(table));
     frame.add(mainPanel);
     
-    panel2.add(label);
     panel2.add(btnBack);
     
   //ACTION LISTENER
@@ -115,7 +110,8 @@ public class ShowEmail {
           System.out.println(privateKey);
 
         } else {
-          label.setText("Decryption Failed!!!");
+          JOptionPane.showMessageDialog(null, "Decryption Failed!!!", "Error", JOptionPane.ERROR_MESSAGE);
+
         }
 
         try {
@@ -131,7 +127,8 @@ public class ShowEmail {
     btnBack.addActionListener((var arg0) -> {
       frame.dispose();
       System.out.println("Yes");
-      new MainMenu(n);
+      MainMenu mainMenu = new MainMenu(n);
+      mainMenu.pack();
     });
 
   }

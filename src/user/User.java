@@ -11,7 +11,7 @@ package user;
  * @author Waffiq Aziz / 123190070
  */
 public class User{
-  private String user_id, pass, full_name, email, telp, dateOfBirth;
+  private String user_id, pass, full_name, email, telp, dateOfBirth, publicKey;
 
 // SETTER
     public void setUser(String email, String pass, String full_name, String telp){
@@ -28,6 +28,10 @@ public class User{
     }
     public void setPass(String pass){
       this.pass = pass;
+    }
+    public boolean setPublicKey(String publicKey){
+      this.publicKey = publicKey;
+      return !publicKey.isBlank(); // return true jika public key tidak kosong
     }
     
 // GETTER  
@@ -48,5 +52,8 @@ public class User{
     }
     public String getPass(){
       return pass;
+    }
+    public String getPublicKey(){
+      return publicKey;
     }
 }
