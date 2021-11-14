@@ -17,7 +17,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,8 +42,6 @@ public class ShowEmailIn {
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
   }
-  
-  
 
   private void createUI(final JFrame frame, User n, int tampilkan) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
     ReadData rd = new ReadData();
@@ -55,7 +52,6 @@ public class ShowEmailIn {
     JPanel panel2 = new JPanel();
     mainPanel.setBorder(new EmptyBorder(20, 0, 20, 0)); // set border
 
-    
     mainPanel.add(panel);
     mainPanel.add(panel2);
     
@@ -84,8 +80,10 @@ public class ShowEmailIn {
         JTable source = (JTable) evt.getSource();
         int row = source.rowAtPoint(evt.getPoint());
         int column = source.columnAtPoint(evt.getPoint());
+        System.out.println(column);
         //get ciphertext
         String cipherText = source.getModel().getValueAt(row, column) + "";
+        String sender = source.getModel().getValueAt(row, column-1) + "";
      
         //get private key
         String plainText = null;
@@ -113,19 +111,23 @@ public class ShowEmailIn {
 
         try {
           plainText = rsa.rsaDecryption(cipherText, privateKey);
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+          frame.dispose();
+        } catch (IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+          Logger.getLogger(ShowEmailIn.class.getName()).log(Level.SEVERE, null, ex);
+          JOptionPane.showMessageDialog(null, "Decryption Failed!!!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (InvalidKeyException ex) {
           Logger.getLogger(ShowEmailIn.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         System.out.println(plainText);
         
-        JOptionPane.showMessageDialog(null, plainText, "Content", JOptionPane.PLAIN_MESSAGE);
+        new DetailEmail(n,sender, plainText);
       }
     });
     
     btnBack.addActionListener((var arg0) -> {
-      frame.dispose();
       System.out.println("Yes");
+      frame.dispose();
       MainMenu mainMenu = new MainMenu(n);
       mainMenu.pack();
     });

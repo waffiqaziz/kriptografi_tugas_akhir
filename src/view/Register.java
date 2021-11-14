@@ -118,7 +118,7 @@ public class Register {
       String date = null;
 
       String name = tfName.getText();
-      String pass = String.valueOf(pfPass.getPassword());
+      String pass = cu.encryptSHA(String.valueOf(pfPass.getPassword())); // enkripsi sha-512
       String email = tfEmail.getText();
       String telp = tfTelp.getText();
 

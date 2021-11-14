@@ -1,12 +1,14 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package control;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import model.MyConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,15 +18,17 @@ import java.util.logging.Logger;
 import user.User;
 import view.Login;
 import view.Register;
+
 /**
  *
  * @author Waffiq Aziz / 123190070
  */
 public class ControlUser {
-  public boolean checkEmail( String email){ // cek apakah acc sudah ada/belum
+
+  public boolean checkEmail(String email) { // cek apakah acc sudah ada/belum
     PreparedStatement ps;
     ResultSet rs;
-    
+
     String query = "SELECT * FROM `user` WHERE `email` =?";
     try {
       MyConnection myConnection = new MyConnection();
@@ -35,7 +39,7 @@ public class ControlUser {
       return rs.next(); // true jika ada username yang sama
     } catch (SQLException ex) {
       Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-    } 
+    }
     return false;
   }
 
@@ -63,41 +67,72 @@ public class ControlUser {
     }
     return false;
   }
-  
-  public boolean register(User n){
-      PreparedStatement ps;    
 
-      String query = "INSERT INTO user (`email`, `pass`, `full_name`, `telp`, `dateOfBirth`, `publicKey`) VALUES (?,?,?,?,?,?)";
+  public boolean register(User n) {
+    PreparedStatement ps;
 
-      try {
-        MyConnection myConnection = new MyConnection();
-        ps = myConnection.getCOnnection().prepareStatement(query);
-        ps.setString(1, n.getEmail());
-        ps.setString(2, n.getPass());
-        ps.setString(3, n.getNama());
-        ps.setString(4, n.getTelp());
-        ps.setString(6, n.getPublicKey());
+    String query = "INSERT INTO user (`email`, `pass`, `full_name`, `telp`, `dateOfBirth`, `publicKey`) VALUES (?,?,?,?,?,?)";
 
-        if (n.getDateOfBirth() != null) { // jika date kosong maka set null
-          ps.setString(5, n.getDateOfBirth());
-        } else {
-          ps.setNull(5, 0);
-        }
+    try {
+      MyConnection myConnection = new MyConnection();
+      ps = myConnection.getCOnnection().prepareStatement(query);
+      ps.setString(1, n.getEmail());
+      ps.setString(2, n.getPass());
+      ps.setString(3, n.getNama());
+      ps.setString(4, n.getTelp());
+      ps.setString(6, n.getPublicKey());
 
-        // jika berhasil
-        if (ps.executeUpdate() > 0) {
-          return true;
-        }
-      } catch (SQLException ex) {
-        Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-        return false;
+      if (n.getDateOfBirth() != null) { // jika date kosong maka set null
+        ps.setString(5, n.getDateOfBirth());
+      } else {
+        ps.setNull(5, 0);
       }
+
+      // jika berhasil
+      if (ps.executeUpdate() > 0) {
+        return true;
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
       return false;
+    }
+    return false;
   }
-  
-  public boolean login(String email, String pass, User n){
+
+  public String encryptSHA(String password) {
+    try {
+      //gunakan SHA-512
+      MessageDigest md = MessageDigest.getInstance("SHA-512");
+
+      // digest() menghitung password 
+      // dilakukan proses enkripsi, simpan dalam bentuk byte array
+      byte[] messageDigest = md.digest(password.getBytes());
+
+      // ubah byte array ke bentuk fungsi signum 
+      BigInteger no = new BigInteger(1, messageDigest);
+
+      // ubah passwor ke nilai hex
+      String hashtext = no.toString(16);
+
+      // ubah ke agar menjadi 32 bit (minimal)
+      while (hashtext.length() < 32) {
+        hashtext = "0" + hashtext;
+      }
+
+      // return the HashText
+      return hashtext;
+    } // For specifying wrong message digest algorithms
+    catch (NoSuchAlgorithmException e) {
+      java.util.logging.Logger.getLogger(ControlUser.class.getName()).log(java.util.logging.Level.SEVERE, null, e);
+    }
+    return null;
+  }
+
+  public boolean login(String email, String pass, User n) {
     PreparedStatement ps;
     ResultSet rs;
+    
+    pass = encryptSHA(pass); // encrypt SHA-512
     
     String query = "SELECT * FROM `user` WHERE `email` =? AND `pass` =?";
 
@@ -107,7 +142,7 @@ public class ControlUser {
       ps.setString(1, email);
       ps.setString(2, pass);
       rs = ps.executeQuery();
-      
+
       if (rs.next()) {
         //`user_id`, `email`, `pass`, `full_name`, `telp`, `dateOfBirth`
         // simpan data dalam variabel 
@@ -117,12 +152,12 @@ public class ControlUser {
         String dtName = rs.getString(4);
         String dtTelp = rs.getString(5);
         String dtDate = rs.getString(6);
-        
+
         // simpan dalam atribut
-          n.setUser(dtEmail, dtPass, dtName, dtTelp);
-          n.setUser_id(dtUserId);
-          n.setDate(dtDate);
-        
+        n.setUser(dtEmail, dtPass, dtName, dtTelp);
+        n.setUser_id(dtUserId);
+        n.setDate(dtDate);
+
         return true;
       } else {
         return false;
@@ -130,10 +165,10 @@ public class ControlUser {
     } catch (SQLException ex) {
       Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
       return false;
-    } 
+    }
   }
-  
-  public boolean changePass(String newPass, String id){
+
+  public boolean changePass(String newPass, String id) {
     PreparedStatement ps;
     String query = "UPDATE `user` SET `pass`=? WHERE `user_id`=?";
 
@@ -145,32 +180,14 @@ public class ControlUser {
       int i = ps.executeUpdate();
 
       return i == 1; // jika change pin success
-      
+
     } catch (SQLException ex) {
       Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
       return false;
     }
   }
 
-  public void setKey(User n,String publicKey){         
-    //Public key
-    System.out.println("insert publickey " + n.getEmail() + "\n" + publicKey +"\n");
-      PreparedStatement ps;
-      String query = "UPDATE `user` SET `publicKey`=? WHERE `email`=?";
-      
-      try {
-        MyConnection myConnection = new MyConnection();
-        ps = myConnection.getCOnnection().prepareStatement(query);
-        ps.setString(1, publicKey);
-        ps.setString(2, n.getEmail());
-        int i = ps.executeUpdate();
-
-      } catch (SQLException ex) {
-        Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-      }
-  }
-  
-  public String getPublicKey(String email) throws IOException{
+  public String getPublicKey(String email) throws IOException {
     PreparedStatement ps;
     ResultSet rs;
     String query = "SELECT * FROM `user` WHERE `email` =?";
@@ -179,9 +196,9 @@ public class ControlUser {
       MyConnection myConnection = new MyConnection();
       ps = myConnection.getCOnnection().prepareStatement(query);
       ps.setString(1, email);
- 
+
       rs = ps.executeQuery();
-      
+
       if (rs.next()) {
         String publicKeyRecipient = rs.getString(7);
         System.out.println(publicKeyRecipient);
@@ -192,7 +209,7 @@ public class ControlUser {
       }
     } catch (SQLException ex) {
       Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-    } 
+    }
     System.out.println("PublicKey penerima gagal");
     return null;
   }

@@ -41,8 +41,6 @@ public class ShowEmailOut {
     frame.setVisible(true);
   }
   
-  
-
   private void createUI(final JFrame frame, User n, int tampilkan) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
     ReadData rd = new ReadData();
 
@@ -82,7 +80,8 @@ public class ShowEmailOut {
         int column = source.columnAtPoint(evt.getPoint());
         //get ciphertext
         String cipherText = source.getModel().getValueAt(row, column) + "";
-     
+        String sender = source.getModel().getValueAt(row, column-1) + "";
+        
         //get private key
         String plainText = null;
         JFileChooser fileChooser = new JFileChooser();
@@ -109,18 +108,20 @@ public class ShowEmailOut {
 
         try {
           plainText = rsa.rsaDecryption(cipherText, privateKey);
+          frame.dispose();
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
           Logger.getLogger(ShowEmailIn.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        JOptionPane.showMessageDialog(null, plainText, "Content", JOptionPane.PLAIN_MESSAGE);
+        new DetailEmail(n,sender, plainText);
       }
     });
     
     btnBack.addActionListener((var arg0) -> {
       frame.dispose();
       System.out.println("Yes");
-      new MainMenu(n);
+      MainMenu mainMenu = new MainMenu(n);
+      mainMenu.pack();
     });
 
   }

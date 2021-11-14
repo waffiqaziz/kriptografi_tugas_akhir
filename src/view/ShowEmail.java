@@ -88,7 +88,8 @@ public class ShowEmail {
         int column = source.columnAtPoint(evt.getPoint());
         //get ciphertext
         String cipherText = source.getModel().getValueAt(row, column) + "";
-     
+        String sender = source.getModel().getValueAt(row, column-1) + "";
+        
         //get private key
         String plainText = null;
         JFileChooser fileChooser = new JFileChooser();
@@ -116,11 +117,12 @@ public class ShowEmail {
 
         try {
           plainText = rsa.rsaDecryption(cipherText, privateKey);
+          frame.dispose();
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
           Logger.getLogger(ShowEmailIn.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        JOptionPane.showMessageDialog(null, plainText, "Content", JOptionPane.PLAIN_MESSAGE);
+        new DetailEmail(n,sender, plainText);
       }
     });
     

@@ -5,7 +5,6 @@
  */
 package view;
 
-import control.ControlUser;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -31,12 +30,11 @@ public class Main {
         if (myConnection.getCOnnection() == null) {
           JOptionPane.showMessageDialog(null, "Tidak dapat terhubung ke database. Pastikan Xampp sudah aktif!", "Pemberitahuan", JOptionPane.INFORMATION_MESSAGE);
         } else {
-//          User n = new User();
+          User n = new User();
 //          ControlUser cu = new ControlUser();
-
-          new Login();
-//            new WriteMail(n);
-//          new SwingTester(n, 1);
+                     Login login = new Login();
+                     login.pack();
+         
 
         }
       }

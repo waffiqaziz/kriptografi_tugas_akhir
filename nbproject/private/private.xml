@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/control/ControlUser.java</file>
-            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/view/Main.java</file>
-            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/user/User.java</file>
-            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/control/RSAKeyPairGenerator.java</file>
-            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/model/ReadData.java</file>
-            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/view/Register.java</file>
-            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/control/RSAUtil.java</file>
+            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/control/BcryptHashingExample.java</file>
+            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/view/DetailEmail.java</file>
+            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/view/ShowEmailOut.java</file>
+            <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/view/ShowEmail.java</file>
             <file>file:/D:/pem/java/Kriptografi/kriptografi_tugas_akhir/src/view/ShowEmailIn.java</file>
         </group>
     </open-files>

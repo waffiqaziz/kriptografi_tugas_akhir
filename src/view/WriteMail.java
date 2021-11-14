@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 import control.ControlUser;
 import control.RSAUtil;
 import java.awt.Color;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -47,9 +46,9 @@ public class WriteMail {
 
   JTextField tfEmailPenerima = new JTextField(15);
   JTextArea taContent = new JTextArea();
-  
+
   Border border = BorderFactory.createLineBorder(Color.GRAY);
- 
+
   JButton btnSend = new JButton("Send");
   JButton btnReset = new JButton("Reset");
   JButton btnBack = new JButton("Back");
@@ -63,8 +62,8 @@ public class WriteMail {
     window.setLocationRelativeTo(null); // center
     window.setResizable(false);
     window.setDefaultCloseOperation(EXIT_ON_CLOSE); // running program berhenti jika tombol close ditekan
-    
-    taContent.setBorder(BorderFactory.createCompoundBorder(border, 
+
+    taContent.setBorder(BorderFactory.createCompoundBorder(border,
             BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 //ADD COMPONENT
     window.add(lEmailPenerima);
@@ -92,106 +91,71 @@ public class WriteMail {
     lContent.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 // ACTION LISTENER
-    btnSend.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        RSAUtil rsa = new RSAUtil();
-        ControlUser cu = new ControlUser();
-        
-        String emailPenerima;
-        String plainText;
-        
-        emailPenerima = tfEmailPenerima.getText();
-        plainText = taContent.getText();
-        
-        String publicKey = null;
-        String cipherText = null;
-        try {
-          publicKey = cu.getPublicKey(emailPenerima);
-        } catch (IOException ex) {
-          Logger.getLogger(WriteMail.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
-          cipherText = rsa.rsaEncryption(plainText, publicKey);
-        } catch (BadPaddingException | IllegalBlockSizeException | InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException ex) {
-          Logger.getLogger(WriteMail.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (control.writeEmail(n, emailPenerima, cipherText)) { // transfer
-          window.dispose();
-          new MainMenu(n);
-          JOptionPane.showMessageDialog(null, "Send Email Success");
-        } else {
-          JOptionPane.showMessageDialog(null, "Send Email Failed");
-        }
+    btnSend.addActionListener((ActionEvent arg0) -> {
+      RSAUtil rsa = new RSAUtil();
+      ControlUser cu = new ControlUser();
+
+      String emailPenerima;
+      String plainText;
+
+      emailPenerima = tfEmailPenerima.getText();
+      plainText = taContent.getText();
+
+      String publicKey = null;
+      String cipherText = null;
+      try {
+        publicKey = cu.getPublicKey(emailPenerima);
+      } catch (IOException ex) {
+        Logger.getLogger(WriteMail.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      try {
+        cipherText = rsa.rsaEncryption(plainText, publicKey);
+      } catch (BadPaddingException | IllegalBlockSizeException | InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException ex) {
+        Logger.getLogger(WriteMail.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      if (control.writeEmail(n, emailPenerima, cipherText)) { // transfer
+        window.dispose();
+        MainMenu mainMenu = new MainMenu(n);
+        mainMenu.pack();
+        JOptionPane.showMessageDialog(null, "Send Email Success");
+      } else {
+        JOptionPane.showMessageDialog(null, "Send Email Failed");
       }
     });
 
-  btnReset.addActionListener ( 
-    (ActionEvent arg0) -> {
+    btnReset.addActionListener((ActionEvent arg0) -> {
       taContent.setText("");
       tfEmailPenerima.setText("");
-    }
-  );
-  btnBack.addActionListener ( 
-    (ActionEvent arg0) -> {
+    });
+
+    btnBack.addActionListener((ActionEvent arg0) -> {
       window.dispose();
-      new MainMenu(n);
-    }
-  );
+      MainMenu mainMenu = new MainMenu(n);
+      mainMenu.pack();
+    });
 
 // MOUSE LISTENER
-  lEmailPenerima.addMouseListener ( 
-    new MouseAdapter() {
+    lEmailPenerima.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked
-      (MouseEvent e) {
+      public void mouseClicked(MouseEvent e) {
         tfEmailPenerima.requestFocusInWindow();
       }
-    }
-  );
-  lContent.addMouseListener ( 
-    new MouseAdapter() {
+    });
+
+    lContent.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked
-      (MouseEvent e) {
+      public void mouseClicked(MouseEvent e) {
         taContent.requestFocusInWindow();
       }
-    }
-  );
+    });
 
-  window.addWindowListener ( 
-    new WindowAdapter() {
+    window.addWindowListener(
+            new WindowAdapter() {
       @Override
-      public void windowClosing
-      (WindowEvent e) {
-       System.out.println("Closed");
+      public void windowClosing(WindowEvent e) {
+        System.out.println("Closed");
       }
-    }
-  );
-
-//  tfEmailPenerima.addKeyListener ( 
-//    new KeyAdapter() {
-//      @Override
-//      public void keyPressed
-//      (KeyEvent e) {
-//        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//          Send.doClick();
-//        }
-//      }
-//    }
-//  );
-//  taContent.addKeyListener ( 
-//    new KeyAdapter() {
-//      @Override
-//      public void keyPressed
-//      (KeyEvent e) {
-//        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//           Send.doClick();
-//        }
-//      }
-//    }
-//  );
-//  
+    });
   }
 }

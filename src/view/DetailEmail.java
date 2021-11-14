@@ -5,23 +5,18 @@
  */
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.LayoutManager;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import model.ReadData;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import user.User;
 
 /**
@@ -30,49 +25,56 @@ import user.User;
  */
 public class DetailEmail {
 
-  public DetailEmail(User n,int tampilkan, String cipherText) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
+  public DetailEmail(User n, String from, String plainText){
     JFrame frame = new JFrame("MAIL - In");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    createUI(frame,n,tampilkan, cipherText);
+    createUI(frame,n,from, plainText);
     frame.setSize(720, 568);
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
   }
   
   
-  private static void createUI(final JFrame frame, User n, int tampilkan, String cipherText) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
-    ReadData rd = new ReadData();
-
+  private static void createUI(final JFrame frame, User n, String from, String plainText) {
+    JPanel mainPanel = new JPanel();
     JPanel panel = new JPanel();
-    LayoutManager BorderLayout = new BorderLayout();
-    JTextArea taContent = new JTextArea();
-    panel.setLayout(BorderLayout);
-
-    JButton btnBack = new JButton("Kembali");
-    final JLabel label = new JLabel();
-
-
-  //ADD TO PANEL
-    frame.add(panel);
-    frame.setSize(550, 400);
-    frame.setVisible(true);
+    JPanel panel2 = new JPanel();
+    JPanel panel3 = new JPanel();
+    JLabel label = new JLabel("From : ");
     
-    panel.add(taContent);
+    JTextField tf = new JTextField(20);
+    JTextArea taContent = new JTextArea(20,45);
+    
+    JButton btnBack = new JButton("Back to Main Menu");
+    Border border = BorderFactory.createLineBorder(Color.GRAY);
+    
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    mainPanel.setBorder(new EmptyBorder(40, 10, 10, 10)); // set border
+    frame.add(mainPanel);
+    mainPanel.add(panel);
+    mainPanel.add(panel2);
+    mainPanel.add(panel3);
+    
+    tf.setText(from);
+    taContent.setText(plainText);
+//    tf.setBorder(new EmptyBorder(10, 10, 10, 10)); // set border
+    
+    taContent.setBorder(BorderFactory.createCompoundBorder(border,
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+    
+  //ADD TO PANEL
     panel.add(label);
-    panel.add(btnBack);
+    panel.add(tf);
+    panel2.add(taContent);
+    panel3.add(btnBack);
     
    
   //ACTION LISTENER
     btnBack.addActionListener((ActionEvent e) -> {
-      frame.dispose();
-      try {
-        new ShowEmailIn(n, tampilkan);
-      } catch (IOException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
-        Logger.getLogger(DetailEmail.class.getName()).log(Level.SEVERE, null, ex);
-      }
+       frame.dispose();
+       MainMenu mainMenu = new MainMenu(n);
+//       mainMenu.pack();
     });
-
-    frame.getContentPane().add(panel, BorderLayout.CENTER);
   }
 }
 
