@@ -16,21 +16,50 @@ import javax.swing.JOptionPane;
  *
  * @author Waffiq Aziz
  */
+
+// local
+//public class MyConnection {
+//
+//  private String url = "jdbc:mysql://localhost/messages";
+//  private String user = "root";
+//  private String pass = "";
+//  private Connection con = null;
+//
+//  // menyambungkan database mysql
+//  public MyConnection(){
+//    try {
+//      con = DriverManager.getConnection(url, user, pass);
+//      System.out.println("Koneksi Berhasil");
+//    } catch (SQLException ex) {
+//      Logger.getLogger(MyConnection.class.getName()).log(Level.SEVERE, null, ex);
+//      JOptionPane.showMessageDialog(null, "Tidak dapat terhubung ke database. Pastikan Xampp sudah aktif!","Pemberitahuan",JOptionPane.INFORMATION_MESSAGE);
+//      con = null; // set if koneksi tidak berhasil
+//    }
+//  }
+//  
+//  public Connection getCOnnection(){
+//    return con;
+//  }
+//}
+
+
+//hosting
 public class MyConnection {
 
-  private String url = "jdbc:mysql://localhost/messages";
-  private String user = "root";
-  private String pass = "";
+  // mysql hosting https://www.freemysqlhosting.net/
+  private String url = "jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6451009";
+  private String user = "sql6451009";
+  private String pass = "zyvVxdMhdY";
   private Connection con = null;
 
   // menyambungkan database mysql
   public MyConnection(){
     try {
-      con = DriverManager.getConnection(url, user, pass);
+      con = DriverManager.getConnection(url,user, pass);
       System.out.println("Koneksi Berhasil");
     } catch (SQLException ex) {
       Logger.getLogger(MyConnection.class.getName()).log(Level.SEVERE, null, ex);
-      JOptionPane.showMessageDialog(null, "Tidak dapat terhubung ke database. Pastikan Xampp sudah aktif!","Pemberitahuan",JOptionPane.INFORMATION_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Cant Connet to Database","Important!!!",JOptionPane.INFORMATION_MESSAGE);
       con = null; // set if koneksi tidak berhasil
     }
   }
