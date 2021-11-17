@@ -152,7 +152,8 @@ public class ControlUser {
         String dtName = rs.getString(4);
         String dtTelp = rs.getString(5);
         String dtDate = rs.getString(6);
-
+        
+        System.out.println("dtpass : " + dtPass);
         // simpan dalam atribut
         n.setUser(dtEmail, dtPass, dtName, dtTelp);
         n.setUser_id(dtUserId);

@@ -35,6 +35,7 @@ public class MainMenu extends JFrame {
   //DEKLARASI KOMPONEN
   JFrame window = new JFrame("MAIL - Main Menu");
   JLabel lGuide = new JLabel();
+  JLabel lGuide2 = new JLabel();
 
   JButton btnChangePass = new JButton("Change Password");
   JButton btnTranfer = new JButton("Write Email");
@@ -45,9 +46,11 @@ public class MainMenu extends JFrame {
   
   public MainMenu(User n) {
     lGuide.setText("Welcome " + n.getNama());
+    lGuide2.setText(n.getEmail());
     lGuide.setVerticalTextPosition(0);
+    lGuide2.setVerticalTextPosition(0);
     window.setLayout(null);
-    window.setSize(380, 390);
+    window.setSize(380, 430);
     window.setVisible(true);
     window.setLocationRelativeTo(null); // center
     window.setResizable(false);
@@ -55,6 +58,7 @@ public class MainMenu extends JFrame {
     
 //ADD COMPONENT
     window.add(lGuide);
+    window.add(lGuide2);
     window.add(btnChangePass);
     window.add(btnEmailIn);
     window.add(btnEmailAll);
@@ -65,14 +69,16 @@ public class MainMenu extends JFrame {
 // SETT BOUNDS
 // sett bounds(m,n,o,p) >>> (sumbu-x,sumbu-y,panjang komponen, tinggi komponen)
     lGuide.setBounds(0, 25, 370, 30);
-    btnTranfer.setBounds(120, 75, 130, 30);
-    btnEmailAll.setBounds(95, 115, 180, 30);
-    btnEmailIn.setBounds(95, 155, 180, 30);
-    btnEmailOut.setBounds(95, 195, 180, 30);
-    btnChangePass.setBounds(110, 235, 155, 30);
-    btnLogout.setBounds(120, 275, 130, 30);
+    lGuide2.setBounds(0, 45, 370, 30);
+    btnTranfer.setBounds(120, 115, 130, 30);
+    btnEmailAll.setBounds(95, 155, 180, 30);
+    btnEmailIn.setBounds(95, 195, 180, 30);
+    btnEmailOut.setBounds(95, 235, 180, 30);
+    btnChangePass.setBounds(110, 275, 155, 30);
+    btnLogout.setBounds(120, 315, 130, 30);
 
     lGuide.setHorizontalAlignment(0);
+    lGuide2.setHorizontalAlignment(0);
 // ACTION LISTENER
     btnChangePass.addActionListener((ActionEvent arg0) -> {
       window.dispose();

@@ -88,7 +88,8 @@ public class ChangePassword {
     lNewPass.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     lRePass.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     lguide.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
+    
+    System.out.println("pass : "+ n.getPass());
 // ACTION LISTENER
     btnChange.addActionListener(new ActionListener() {
       @Override
@@ -98,7 +99,7 @@ public class ChangePassword {
         try{
           rePass = String.valueOf(pfRePass.getPassword());
           newPass = String.valueOf(pfNewPass.getPassword());
-          oldPass = String.valueOf(pfOldPass.getPassword());
+          oldPass = cn.encryptSHA(String.valueOf(pfOldPass.getPassword()));
           
           System.out.println(n.getPass() + " " + rePass + " " + newPass);
           if(rePass.equals(newPass)) {
@@ -107,6 +108,9 @@ public class ChangePassword {
             pfRePass.requestFocusInWindow();
             cek = false;
           }
+          
+          rePass = cn.encryptSHA(rePass);
+          newPass = cn.encryptSHA(rePass);
           
           if (oldPass.equals(n.getPass()) && cek) { // cek Password lama dengan Password input user sama/tidak
             if (cn.changePass(newPass, n.getUserID())) { // update Password

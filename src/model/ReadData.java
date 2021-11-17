@@ -71,8 +71,8 @@ public class ReadData {
         case 1 -> {
           // show all emai.l
           while (rs.next()) { //konversi tabel ke string
-            data[row][0] = rs.getString(3);
             data[row][1] = rs.getString(2);
+            data[row][0] = rs.getString(3);
             data[row][2] = rs.getString(4);
 
             row++;

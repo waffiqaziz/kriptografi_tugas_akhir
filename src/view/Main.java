@@ -18,7 +18,10 @@ public class Main {
       MyConnection myConnection = new MyConnection();
       if (myConnection.getCOnnection() != null) {
         Login login = new Login();
+        Login login2 = new Login();
         login.pack(); 
+        login2.pack(); 
+//        Login login2 = new Login();
       }
     });
   }
