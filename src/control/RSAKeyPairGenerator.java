@@ -41,6 +41,8 @@ public class RSAKeyPairGenerator {
           fw.flush();
         }
       } catch (IOException ex) {
+         java.util.logging.Logger.getLogger(RSAKeyPairGenerator.class.getName()).
+                 log(java.util.logging.Level.SEVERE, null, ex);
       }
     }
   }
